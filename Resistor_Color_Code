@@ -1,0 +1,15 @@
+Resistor Color Code:
+
+if 3 bands:
+Band 1, Band 2, Band 3
+1st digit, 2nd digit, multiplier
+ ±20% tolerance min->max calculation
+if 4 bands:
+Band 1, Band 2, Band 3, Band 4
+1st digit, 2nd digit, multiplier, tolerance
+min->max calculation: resistance -+ resistance * tolerance
+
+if 5 bands:
+Band 1, Band 2, Band 3, Band 4, Band 5
+1st digit, 2nd digit, 3rd digit, multiplier, tolerance
+min->max calculation: resistance -+ resistance * tolerance
