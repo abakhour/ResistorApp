@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 
 class ResistorBand {
@@ -9,8 +10,13 @@ class ResistorBand {
 
 class ResistorWidget extends StatefulWidget {
   final int numberOfBands;
+  final void Function(double, double) onResistanceCalculated;
 
-  ResistorWidget({this.numberOfBands = 3});
+  const ResistorWidget({
+    Key? key,
+    this.numberOfBands = 3,
+    required this.onResistanceCalculated,
+  }) : super(key: key);
 
   @override
   _ResistorWidgetState createState() => _ResistorWidgetState();
@@ -36,6 +42,39 @@ class _ResistorWidgetState extends State<ResistorWidget> {
   void initState() {
     super.initState();
     resistorBands = List.filled(widget.numberOfBands, resistorColors[0]);
+    widget.onResistanceCalculated(calculateResistance(), calculateTolerance());
+  }
+
+  double calculateResistance() {
+    int firstDigit = resistorBands[0].value;
+    int secondDigit = resistorBands[1].value;
+    int thirdDigit = 0;
+    int multipIndex = resistorBands.length - 2;
+    int multiplier = resistorBands[multipIndex].value;
+
+    if (resistorBands.length == 3) {
+      firstDigit = resistorBands[0].value;
+      secondDigit = resistorBands[1].value;
+      multiplier = resistorBands[2].value;
+    }
+    if (resistorBands.length == 5) {
+      firstDigit = 10 * resistorBands[0].value;
+      secondDigit = 10 * resistorBands[1].value;
+      thirdDigit = resistorBands[2].value;
+    }
+
+    int significantFigures = (firstDigit * 10) + secondDigit + thirdDigit;
+    double resistanceValue =
+        significantFigures * pow(10, multiplier).toDouble();
+
+    return resistanceValue;
+  }
+
+  double calculateTolerance() {
+    if (widget.numberOfBands == 4 || widget.numberOfBands == 5) {
+      return resistorBands.last.value/1.0;
+    }
+    return 2;
   }
 
   @override
@@ -44,13 +83,18 @@ class _ResistorWidgetState extends State<ResistorWidget> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Display resistor bands
           buildResistorBands(),
-
-          SizedBox(height: 20),
-
-          // Color selection buttons
+          const SizedBox(height: 20),
           buildColorSelection(),
+          const SizedBox(height: 20),
+          Text(
+            'Resistance: ${calculateResistance()} ohms',
+            style: const TextStyle(fontSize: 16),
+          ),
+          Text(
+            'Tolerance: ${calculateTolerance() * 10}%',
+            style: const TextStyle(fontSize: 16),
+          ),
         ],
       ),
     );
@@ -77,7 +121,7 @@ class _ResistorWidgetState extends State<ResistorWidget> {
       for (var j = i; j < i + 2 && j < widget.numberOfBands; j++) {
         rowChildren.add(
           Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: DropdownButton<ResistorBand>(
               value: resistorBands[j],
               items: resistorColors.map((band) {
@@ -90,10 +134,10 @@ class _ResistorWidgetState extends State<ResistorWidget> {
                         height: 20,
                         color: band.color,
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       Text(
                         '${_colorName(band.color)} ${band.value}',
-                        style: TextStyle(color: Colors.black),
+                        style: const TextStyle(color: Colors.black),
                       ),
                     ],
                   ),
@@ -102,6 +146,8 @@ class _ResistorWidgetState extends State<ResistorWidget> {
               onChanged: (newBand) {
                 setState(() {
                   resistorBands[j] = newBand!;
+                  widget.onResistanceCalculated(
+                      calculateResistance(), calculateTolerance());
                 });
               },
             ),
@@ -120,16 +166,16 @@ class _ResistorWidgetState extends State<ResistorWidget> {
   }
 }
 
-  String _colorName(Color color) {
-    if (color == Colors.black) return 'Black';
-    if (color == Colors.brown) return 'Brown';
-    if (color == Colors.red) return 'Red';
-    if (color == Colors.orange) return 'Orange';
-    if (color == Colors.yellow) return 'Yellow';
-    if (color == Colors.green) return 'Green';
-    if (color == Colors.blue) return 'Blue';
-    if (color == Colors.purple) return 'Purple';
-    if (color == Colors.grey) return 'Grey';
-    if (color == Colors.white) return 'White';
-    return 'Unknown';
-  }
+String _colorName(Color color) {
+  if (color == Colors.black) return 'Black';
+  if (color == Colors.brown) return 'Brown';
+  if (color == Colors.red) return 'Red';
+  if (color == Colors.orange) return 'Orange';
+  if (color == Colors.yellow) return 'Yellow';
+  if (color == Colors.green) return 'Green';
+  if (color == Colors.blue) return 'Blue';
+  if (color == Colors.purple) return 'Purple';
+  if (color == Colors.grey) return 'Grey';
+  if (color == Colors.white) return 'White';
+  return 'Unknown';
+}

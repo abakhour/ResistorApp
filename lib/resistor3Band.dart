@@ -2,12 +2,18 @@ import 'package:flutter/material.dart';
 import 'resistorWidget.dart';
 
 class Resistor3Band extends StatelessWidget {
+  const Resistor3Band({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('3 Band Resistor')),
+      appBar: AppBar(title: const Text('3 Band Resistor')),
       body: Center(
-        child: ResistorWidget()
+        child: ResistorWidget(
+          numberOfBands: 3,
+          onResistanceCalculated: (resistance, tolerance) {
+          },
+        ),
       ),
     );
   }
