@@ -19,3 +19,15 @@ min->max calculation: resistance -+ resistance * tolerance
  if 5 bands:
  Band 1, Band 2, Band 3, Band 4, Band 5
  1st digit, 2nd digit, 3rd digit, multiplier, tolerance
+
+
+Brown 1% Tolerance
+Red 2% Tolerance
+Orange 3% Tolerance
+Yellow 4% Tolerance
+Green 0.5% Tolerance
+Blue 0.25% Tolerance
+Violet 0.10% Tolerance
+Gray 0.05% Tolerance
+Gold 5% Tolerance
+Silver 10% Tolerance

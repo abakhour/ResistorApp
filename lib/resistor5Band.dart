@@ -11,7 +11,7 @@ class Resistor5Band extends StatelessWidget {
       body: Center(
         child: ResistorWidget(
           numberOfBands: 5,
-          onResistanceCalculated: (resistance, tolerance) {
+          onResistanceCalculated: (resistance, tolerance, minRes, maxRes) {
           },
         ),
       ),
