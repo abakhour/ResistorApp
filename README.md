@@ -8,7 +8,7 @@ Having trouble knowing the value of your resistor? Here is the solution with our
 
 1. Open Android Studio or VsCode
 2. Open Terminal and then Select Gitbash inside Android Studio or VsCode
-3. Write ```javascript git clone https://github.com/abakhour/ResistorApp.git ```
+3. Write ``` $ git clone https://github.com/abakhour/ResistorApp.git ```
 4. Press Enter and you will find it on your local device downloaded
 
 ## How to Use
