@@ -1,16 +1,19 @@
-# resistor_app
+# Resistor Value Finder App
 
-A new Flutter project.
+## Introduction
 
-## Getting Started
+Having trouble knowing the value of your resistor? Here is the solution with our Resistor app. You can select the number of bands and specify the colors and values and it will automatically calculate and find out the resistance for you.
 
-This project is a starting point for a Flutter application.
+## How to Download
 
-A few resources to get you started if this is your first Flutter project:
+1. Open Android Studio or VsCode
+2. Open Terminal and then Select Gitbash inside Android Studio or VsCode
+3. Write ```javascript git clone https://github.com/abakhour/ResistorApp.git ```
+4. Press Enter and you will find it on your local device downloaded
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## How to Use
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. Open device manager in Android Studio
+2. Run emulator
+3. Select emulator device
+4. Run main.dart
