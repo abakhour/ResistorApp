@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'resistorWidget.dart';
+import 'package:resistor_app/widgets/footer.dart';
+import 'package:resistor_app/widgets/header.dart';
+import '../widgets/resistor_widget.dart';
 
 class Resistor4Band extends StatelessWidget {
   const Resistor4Band({Key? key}) : super(key: key);
@@ -7,15 +9,14 @@ class Resistor4Band extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('4 Band Resistor')),
+      appBar: (const Header(titleText: '4 Band Resistor')),
       body: Center(
         child: ResistorWidget(
           numberOfBands: 4,
-          onResistanceCalculated: (resistance, tolerance, minRes, maxRes) {
-          },
+          onResistanceCalculated: (resistance, tolerance, minRes, maxRes) {},
         ),
       ),
+      bottomNavigationBar: Footer(),
     );
   }
 }
-

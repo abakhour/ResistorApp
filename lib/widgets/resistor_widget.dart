@@ -4,14 +4,12 @@ import 'package:flutter/material.dart';
 class ResistorBand {
   final Color color;
   final double value;
-
   ResistorBand(this.color, this.value);
 }
 
 class ToleranceBand {
   final Color color;
   final double value;
-
   ToleranceBand(this.color, this.value);
 }
 
@@ -26,10 +24,10 @@ class ResistorWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ResistorWidgetState createState() => _ResistorWidgetState();
+  ResistorWidgetState createState() => ResistorWidgetState();
 }
 
-class _ResistorWidgetState extends State<ResistorWidget> {
+class ResistorWidgetState extends State<ResistorWidget> {
   late List<ResistorBand> resistorBands;
   late List<ToleranceBand> toleranceBands;
 
@@ -42,10 +40,9 @@ class _ResistorWidgetState extends State<ResistorWidget> {
     ToleranceBand(Colors.blue, 0.25),
     ToleranceBand(Colors.purple, 0.1),
     ToleranceBand(Colors.grey, 0.05),
-    ToleranceBand(Color(0xFFFFD700), 5), // Gold
-    ToleranceBand(Color(0xFFC0C0C0), 10) // Silver
+    ToleranceBand(const Color(0xFFFFD700), 5), // Gold
+    ToleranceBand(const Color(0xFFC0C0C0), 10) // Silver
   ];
-
 
   final List<ResistorBand> resistorColors = [
     ResistorBand(Colors.black, 0),
@@ -63,10 +60,10 @@ class _ResistorWidgetState extends State<ResistorWidget> {
   @override
   void initState() {
     super.initState();
-
-    toleranceBands = List<ToleranceBand>.filled(widget.numberOfBands, toleranceColors[0]);
-
+    toleranceBands =
+        List<ToleranceBand>.filled(widget.numberOfBands, toleranceColors[0]);
     resistorBands = List.filled(widget.numberOfBands, resistorColors[0]);
+
     widget.onResistanceCalculated(
       calculateResistance(),
       calculateTolerance(),
@@ -75,18 +72,16 @@ class _ResistorWidgetState extends State<ResistorWidget> {
     );
   }
 
-
   double calculateTolerance() {
-    double Tolerance = 0.0;
+    double tolerance = 0.0;
     if (widget.numberOfBands == 3) {
       return 20;
     }
     for (var band in toleranceBands) {
-      Tolerance = band.value;
+      tolerance = band.value;
     }
-    return Tolerance;
+    return tolerance;
   }
-
 
   double calculateResistance() {
     double firstDigit = resistorBands[0].value;
@@ -94,7 +89,6 @@ class _ResistorWidgetState extends State<ResistorWidget> {
     double thirdDigit = 0;
     int multipIndex = resistorBands.length - 2;
     double multiplier = resistorBands[multipIndex].value;
-
     if (resistorBands.length == 3) {
       firstDigit = resistorBands[0].value;
       secondDigit = resistorBands[1].value;
@@ -105,14 +99,11 @@ class _ResistorWidgetState extends State<ResistorWidget> {
       secondDigit = 10 * resistorBands[1].value;
       thirdDigit = resistorBands[2].value;
     }
-
     double significantFigures = (firstDigit * 10) + secondDigit + thirdDigit;
     double resistanceValue =
         significantFigures * pow(10, multiplier).toDouble();
-
     return resistanceValue;
   }
-
 
   double calculateMinResistance() {
     double resistance = calculateResistance();
@@ -126,35 +117,61 @@ class _ResistorWidgetState extends State<ResistorWidget> {
     return resistance + (resistance * tolerance);
   }
 
+Widget buildResultText(String label, double value, {bool isPercentage = false}) {
+  return Container(
+    margin: const EdgeInsets.only(left: 50, top: 40, right: 50, bottom: 5),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Text(
+              '$label:',
+              style: const TextStyle(fontSize: 16),
+            ),
+          ),
+        ),
+        // const SizedBox(width: 8),
+        Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.black, 
+              width: 2, 
+            ),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Text(
+            '${value.toStringAsFixed(2)} ${isPercentage ? '%' : 'ohms'}',
+            style: const TextStyle(fontSize: 16),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          buildResistorBands(),
-          const SizedBox(height: 20),
-          buildColorSelection(),
-          const SizedBox(height: 20),
-          Text(
-            'Resistance: ${calculateResistance().toStringAsFixed(2)} ohms',
-            style: const TextStyle(fontSize: 16),
+    return SafeArea(
+      child: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+              buildResistorBands(),
+              const SizedBox(height: 20),
+              buildColorSelection(),
+              buildResultText('Tolerance', calculateTolerance(),
+                  isPercentage: true),
+              buildResultText('Resistance', calculateResistance()),
+              buildResultText('Min Resistance', calculateMinResistance()),
+              buildResultText('Max Resistance', calculateMaxResistance()),
+            ],
           ),
-          Text(
-            'Tolerance: ${calculateTolerance().toStringAsFixed(2)}%',
-            style: const TextStyle(fontSize: 16),
-          ),
-          Text(
-            'Min Resistance: ${calculateMinResistance().toStringAsFixed(
-                2)} ohms',
-            style: const TextStyle(fontSize: 16),
-          ),
-          Text(
-              'Max Resistance: ${calculateMaxResistance().toStringAsFixed(
-                  2)} ohms',
-              style: const TextStyle(fontSize: 16)
-          )
-        ],
+        ),
       ),
     );
   }
@@ -166,7 +183,7 @@ class _ResistorWidgetState extends State<ResistorWidget> {
         for (var band in resistorBands)
           Container(
             width: 20,
-            height: 100,
+            height: MediaQuery.of(context).size.height * 0.2,
             color: band.color,
           ),
       ],
@@ -265,7 +282,7 @@ class _ResistorWidgetState extends State<ResistorWidget> {
   }
 }
 
-  String _colorName(Color color) {
+String _colorName(Color color) {
   if (color == Colors.black) return 'Black';
   if (color == Colors.brown) return 'Brown';
   if (color == Colors.red) return 'Red';
@@ -276,7 +293,7 @@ class _ResistorWidgetState extends State<ResistorWidget> {
   if (color == Colors.purple) return 'Purple';
   if (color == Colors.grey) return 'Grey';
   if (color == Colors.white) return 'White';
-  if (color == Color(0xFFFFD700) ) return 'Gold';
-  if (color == Color(0xFFC0C0C0) ) return 'Silver';
+  if (color == const Color(0xFFFFD700)) return 'Gold';
+  if (color == const Color(0xFFC0C0C0)) return 'Silver';
   return 'Unknown';
 }
